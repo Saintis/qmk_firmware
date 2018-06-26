@@ -11,6 +11,7 @@ extern keymap_config_t keymap_config;
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 
 enum planck_layers {
+  _QWERTY,
   _DVRK,
   _LOWER,
   _RAISE,
@@ -23,7 +24,8 @@ enum planck_layers {
 };
 
 enum planck_keycodes {
-  DVRK = SAFE_RANGE,
+  QWERTY = SAFE_RANGE,
+  DVRK,
   LOWER,
   RAISE,
   SDRK,
@@ -37,6 +39,24 @@ enum planck_keycodes {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+
+/* Qwerty
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * |   Q  |   W  |   E  |   R  |   T  |   '  |  |   =  |   Y  |   U  |   I  |   O  |   P  |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |   A  |   S  |   D  |   F  |   G  | ESC  |  | BSPC |   H  |   J  |   K  |   L  |   ;  |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |   Z  |   X  |   C  |   V  |   B  | TAB  |  | ENT  |   N  |   M  |   ,  |   .  |   /  |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Sft  | Ctl  | Alt  | Gui  |Lower | SPC  |  | SPC  |Raise |   <  |   v  |   ^  |   >  |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_QWERTY] = {
+  {KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_SLSH, /* */ KC_EQL,  KC_F,     KC_G,    KC_C,   KC_R,    KC_L},
+  {KC_A,    KC_O,    KC_E,    KC_U,    KC_I,    KC_ESC,  /* */ KC_BSPC, KC_D,     KC_H,    KC_T,   KC_N,    KC_S},
+  {KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_TAB,  /* */ KC_ENT,  KC_B,     KC_M,    KC_W,   KC_V,    KC_Z},
+  {KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  /* */ KC_SPC,  RAISE, KC_LEFT, KC_DOWN,  KC_UP, KC_RIGHT}
+},
 
 /* Dvorak
  * ,-----------------------------------------------------------------------------------.
