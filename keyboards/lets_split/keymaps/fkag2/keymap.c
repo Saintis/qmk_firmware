@@ -30,7 +30,6 @@ enum custom_keycodes {
 };
 
 // Mod taps
-#define GUI_SPC GUI_T(KC_SPC)  // GUI / ⌘ when held, Space when tapped
 #define SFT_ENT SFT_T(KC_ENT)  // Shift / ⇧ when held, Enter when tapped
 #define SFT_TAB SFT_T(KC_TAB)  // Shift / ⇧ when held, Tab when tapped
 #define CTL_ESC CTL_T(KC_ESC)  // Control / ⌃ when held, Escape when tapped
@@ -42,10 +41,10 @@ enum custom_keycodes {
 #define DSK_D LCTL(KC_DOWN)
 
 // Mac commands
-#define SCSHT S(LGUI(KC_3))  // Takes full-screen screenshot
-#define SCSLC S(LGUI(KC_4))  // Takes a select-area screenshot
-#define W_L S(LGUI(KC_LBRC)) // Shifts view one tab to the left
-#define W_R S(LGUI(KC_RBRC)) // Shifts view one tab to the right
+#define SCSHT SCMD(KC_3)    // Takes full-screen screenshot
+#define SCSLC SCMD(KC_4)    // Takes a select-area screenshot
+#define W_L   SCMD(KC_LBRC) // Shifts view one tab to the left
+#define W_R   SCMD(KC_RBRC) // Shifts view one tab to the right
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
@@ -62,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
    *            │  `  │HYPER│  ⌥  │  ⌘  │LOWER│ SPC │   │BSPC │RAISE│  ←  │  ↑  │  ↓  │  →  │
    *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
-   *   NOTE: I had to switch LGUI and LALT layout on base layer to get CMD / ALT to work nicely
+   *   NOTE: I had to switch LCMD and LALT layout on base layer to get CMD / ALT to work nicely
    */
 [_QWERTY] = LAYOUT_ortho_4x12( \
     KC_DEL,  KC_Q,    KC_W,    KC_E,    KC_R,   KC_T,   KC_Y ,  KC_U,   KC_I,    KC_O,   KC_P,   KC_BSLS, \
@@ -180,13 +179,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______, ___x___, ___x___, ___x___, ___x___  \
 )
 
-
 };
 
 #ifdef AUDIO_ENABLE
 float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
 float tone_dvorak[][2]     = SONG(DVORAK_SOUND);
 float tone_colemak[][2]    = SONG(COLEMAK_SOUND);
+float tone_norman[][2]     = SONG(QWERTY_SOUND);
 #endif
 
 void persistent_default_layer_set(uint16_t default_layer) {
@@ -211,6 +210,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           PLAY_SONG(tone_colemak);
         #endif
         persistent_default_layer_set(1UL<<_COLEMAK);
+      }
+      return false;
+      break;
+    case NORMAN:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_SONG(tone_norman);
+        #endif
+        persistent_default_layer_set(1UL<<_NORMAN);
       }
       return false;
       break;
