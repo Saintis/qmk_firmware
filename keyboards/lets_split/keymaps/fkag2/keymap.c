@@ -43,10 +43,11 @@ enum custom_keycodes {
 #define DSK_D LCTL(KC_DOWN)
 
 // Mac commands
-#define SCSHT SCMD(KC_3)    // Takes full-screen screenshot
-#define SCSLC SCMD(KC_4)    // Takes a select-area screenshot
-#define W_L   SCMD(KC_LBRC) // Shifts view one tab to the left
-#define W_R   SCMD(KC_RBRC) // Shifts view one tab to the right
+#define SCSHT SCMD(KC_3)       // Takes full-screen screenshot
+#define SCSLC SCMD(KC_4)       // Takes a select-area screenshot
+#define W_L   SCMD(KC_LBRC)    // Shifts view one tab to the left
+#define W_R   SCMD(KC_RBRC)    // Shifts view one tab to the right
+#define SCLCK S(LCTL(KC_PWR)) // Locks the screen on a Mac
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
@@ -135,14 +136,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
    *            │     │Next │Vol- │Vol+ │Play │  [  │   │  ]  │  1  │  2  │  3  │  -  │     │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │     │     │     │     │     │   │     │     │  0  │  .  │  +  │ --- │
+   *            │SCLCK│     │     │     │     │     │   │     │     │  0  │  .  │  +  │ --- │
    *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
    */
 [_LOWER] = LAYOUT_ortho_4x12( \
   _______,  SCSHT ,  SCSLC ,   W_L  ,   W_R  , KC_LCBR, KC_RCBR,   KC_7 ,   KC_8 ,   KC_9 , KC_PSLS, KC_PEQL, \
   _______,  DSK_L ,  DSK_U ,  DSK_D ,  DSK_R , KC_LPRN, KC_RPRN,   KC_4 ,   KC_5 ,   KC_6 , KC_PAST, KC_UNDS, \
   _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY, KC_LBRC, KC_RBRC,   KC_1 ,   KC_2 ,   KC_3 , KC_PMNS, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______,   KC_0 ,  KC_DOT, KC_PPLS, ___x___  \
+   SCLCK , _______, _______, _______, _______, _______, _______, _______,   KC_0 ,  KC_DOT, KC_PPLS, ___x___  \
 ),
 
 /* Raise (Symbols and Function keys)
