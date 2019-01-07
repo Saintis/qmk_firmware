@@ -11,21 +11,19 @@ extern keymap_config_t keymap_config;
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
-#define _QWERTY 0
-#define _COLEMAK 1
-#define _NORMAN 2
-#define _DVORAK 3
+#define _NORMAN 0
+#define _QWERTY 1
 #define _LOWER 4
 #define _RAISE 5
+#define _NAV 6
 #define _ADJUST 16
 
 enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
-  COLEMAK,
-  NORMAN,
-  DVORAK,
+  NORMAN = SAFE_RANGE,
+  QWERTY,
   LOWER,
   RAISE,
+  NAV,
   ADJUST,
 };
 
@@ -35,6 +33,9 @@ enum custom_keycodes {
 #define SFT_ESC SFT_T(KC_ESC)  // Shift / ⇧ when held, Escape when tapped
 #define CTL_ESC CTL_T(KC_ESC)  // Control / ⌃ when held, Escape when tapped
 #define CTL_TAB CTL_T(KC_TAB)  // Control / ⇧ when held, Tab when tapped
+
+// Nav layer trigger
+#define NAV_T(kc) LT(_NAV, kc)  // Nav layer when held, kc when tapped
 
 // Mac desktop movement keys
 #define DSK_L LCTL(KC_LEFT)
@@ -53,78 +54,76 @@ enum custom_keycodes {
 #define _______ KC_TRNS
 #define ___x___ KC_NO
 
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-/* Base layer (Qwerty)
-   *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-   *            │ DEL │  Q  │  W  │  E  │  R  │  T  │   │  Y  │  U  │  I  │  O  │  P  │  \  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │⌃/TAB│  A  │  S  │  D  │  F  │  G  │   │  H  │  J  │  K  │  L  │  ;  │  '  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │⇧/ESC│  Z  │  X  │  C  │  V  │  B  │   │  N  │  M  │  ,  │  .  │  /  │⇧/ENT│
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │  `  │HYPER│  ⌥  │  ⌘  │LOWER│ SPC │   │BSPC │RAISE│  ←  │  ↑  │  ↓  │  →  │
-   *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
-   *   NOTE: I had to switch LCMD and LALT layout on base layer to get CMD / ALT to work nicely
-   */
-[_QWERTY] = LAYOUT_ortho_4x12( \
-    KC_DEL,  KC_Q,    KC_W,    KC_E,    KC_R,   KC_T,   KC_Y ,  KC_U,   KC_I,    KC_O,   KC_P,   KC_BSLS, \
-   CTL_TAB,  KC_A,    KC_S,    KC_D,    KC_F,   KC_G,   KC_H ,  KC_J,   KC_K,    KC_L,  KC_SCLN, KC_QUOT, \
-   SFT_ESC,  KC_Z,    KC_X,    KC_C,    KC_V,   KC_B,   KC_N ,  KC_M,  KC_COMM, KC_DOT, KC_SLSH, SFT_ENT, \
-    KC_GRV, KC_HYPR, KC_LCMD, KC_LALT, LOWER, KC_SPC, KC_BSPC, RAISE,  KC_LEFT, KC_UP,  KC_DOWN, KC_RGHT  \
-),
+// Split key layers for ease of programming / clarity
 
-/* Base layer (Colemak Mod-DH)
-   *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-   *            │     │  Q  │  W  │  F  │  P  │  B  │   │  J  │  L  │  U  │  Y  │  ;  │  \  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │  A  │  R  │  S  │  T  │  G  │   │  M  │  N  │  E  │  I  │  O  │  '  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │  Z  │  X  │  C  │  D  │  V  │   │  K  │  H  │  ,  │  .  │  /  │     │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │  `  │     │     │     │     │     │   │     │     │     │     │     │     │
-   *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
-   */
-[_COLEMAK] = LAYOUT_ortho_4x12( \
-  _______,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,    KC_J,    KC_L,    KC_U,    KC_Y,   KC_SCLN, KC_BSLS, \
-  _______,  KC_A,    KC_R,    KC_S,    KC_T,    KC_G,    KC_M,    KC_N,    KC_E,    KC_I,    KC_O,   KC_QUOT, \
-  _______,  KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_K,    KC_H,   KC_COMM,  KC_DOT, KC_SLSH, _______, \
-   KC_GRV, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
-),
+// NORMAN layer
+#define _________________NORMAN_L1_________________ KC_Q,    KC_W,    KC_D,    KC_F,    KC_K
+#define _________________NORMAN_L2_________________ KC_A,    KC_S,    KC_E,    KC_T,    KC_G
+#define _________________NORMAN_L3_________________ KC_Z,    KC_X,    KC_C,    KC_V,    KC_B
+
+#define _________________NORMAN_R1_________________ KC_J,    KC_U,    KC_R,    KC_L,    KC_SCLN
+#define _________________NORMAN_R2_________________ KC_Y,    KC_N,    KC_I,    KC_O,    NAV_T(KC_H)
+#define _________________NORMAN_R3_________________ KC_P,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH
+
+// QWERTY layer
+#define _________________QWERTY_L1_________________ KC_Q,    KC_W,    KC_E,    KC_R,    KC_T
+#define _________________QWERTY_L2_________________ KC_A,    KC_S,    KC_D,    KC_F,    KC_G
+#define _________________QWERTY_L3_________________ KC_Z,    KC_X,    KC_C,    KC_V,    KC_B
+
+#define _________________QWERTY_R1_________________ KC_Y,    KC_U,    KC_I,    KC_O,    KC_P
+#define _________________QWERTY_R2_________________ KC_H,    KC_J,    KC_K,    KC_L,    NAV_T(KC_SCLN)
+#define _________________QWERTY_R3_________________ KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH
+
+#define LETS_SPLIT(...) LAYOUT_ortho_4x12(__VA_ARGS__)  // macro wrapper to manage with above definitions
+
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+/* Modifiers, not a separate layer, used on the first layer
+ *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+ *            │ DEL │     │     │     │     │     │   │     │     │     │     │     │     │
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │⌃/TAB│     │     │     │     │     │   │     │     │     │     │ NAV │     │ -- Only when held
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │⇧/ESC│     │     │     │     │     │   │     │     │     │     │     │⇧/ENT│
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │     │HYPER│  ⌥  │  ⌘  │LOWER│ SPC │   │BSPC │RAISE│  ⌘  │  ⌥  │HYPER│     │
+ *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
+ *   NOTE: I had to switch LCMD and LALT layout on base layer to get CMD / ALT to work nicely
+ */
 
 /* Base layer (Norman)
-   *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-   *            │     │  Q  │  W  │  D  │  F  │  K  │   │  J  │  U  │  R  │  L  │  ;  │  \  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │  A  │  S  │  E  │  T  │  G  │   │  Y  │  N  │  I  │  O  │  H  │  '  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │  Z  │  X  │  C  │  V  │  B  │   │  P  │  M  │  ,  │  .  │  /  │     │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │  `  │     │     │     │     │     │   │     │     │     │     │     │     │
-   *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
-   */
-[_NORMAN] = LAYOUT_ortho_4x12( \
-  _______,  KC_Q,    KC_W,    KC_D,    KC_F,    KC_K,    KC_J,    KC_U,    KC_R,    KC_L,   KC_SCLN, KC_BSLS, \
-  _______,  KC_A,    KC_S,    KC_E,    KC_T,    KC_G,    KC_Y,    KC_N,    KC_I,    KC_O,    KC_H,   KC_QUOT, \
-  _______,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_P,    KC_M,   KC_COMM,  KC_DOT, KC_SLSH, _______, \
-   KC_GRV, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
+ *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+ *            │     │  Q  │  W  │  D  │  F  │  K  │   │  J  │  U  │  R  │  L  │  ;  │  \  │
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │     │  A  │  S  │  E  │  T  │  G  │   │  Y  │  N  │  I  │  O  │  H  │  '  │
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │     │  Z  │  X  │  C  │  V  │  B  │   │  P  │  M  │  ,  │  .  │  /  │     │
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │  `  │     │     │     │     │     │   │     │     │     │     │     │     │
+ *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
+ */
+[_NORMAN] = LETS_SPLIT( \
+   KC_DEL, _________________NORMAN_L1_________________, _________________NORMAN_R1_________________, KC_BSLS, \
+  CTL_TAB, _________________NORMAN_L2_________________, _________________NORMAN_R2_________________, KC_QUOT, \
+  SFT_ESC, _________________NORMAN_L3_________________, _________________NORMAN_R3_________________, SFT_ENT, \
+   KC_GRV, KC_HYPR, KC_LALT, KC_LCMD,   LOWER,  KC_SPC, KC_BSPC,   RAISE, KC_RCMD, KC_RALT, KC_HYPR, ___x___  \
 ),
 
-
-/* Base layer (Dvorak)
-   *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-   *            │     │  '  │  ,  │  .  │  P  │  Y  │   │  F  │  G  │  C  │  R  │  L  │  \  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │  A  │  O  │  E  │  U  │  I  │   │  D  │  H  │  T  │  N  │  S  │  /  │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │  ;  │  Q  │  J  │  K  │  X  │   │  B  │  M  │  W  │  V  │  Z  │     │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │  `  │     │     │     │     │     │   │     │     │     │     │     │     │
-   *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
-   */
-[_DVORAK] = LAYOUT_ortho_4x12( \
-  _______, KC_QUOT, KC_COMM, KC_DOT,   KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,   KC_BSLS, \
-  _______,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,    KC_D,    KC_H,    KC_T,    KC_N,    KC_S,   KC_SLSH, \
-  _______, KC_SCLN,  KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,   _______, \
+/* Base layer (Qwerty, back-up layer)
+ *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+ *            │     │  Q  │  W  │  E  │  R  │  T  │   │  Y  │  U  │  I  │  O  │  P  │  \  │
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │     │  A  │  S  │  D  │  F  │  G  │   │  H  │  J  │  K  │  L  │  ;  │  '  │
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │     │  Z  │  X  │  C  │  V  │  B  │   │  N  │  M  │  ,  │  .  │  /  │     │
+ *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+ *            │  `  │     │     │     │     │     │   │     │     │     │     │     │     │
+ *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
+ */
+[_QWERTY] = LETS_SPLIT( \
+  _______, _________________QWERTY_L1_________________, _________________QWERTY_R1_________________, KC_BSLS, \
+  _______, _________________QWERTY_L2_________________, _________________QWERTY_R2_________________, KC_QUOT, \
+  _______, _________________QWERTY_L3_________________, _________________QWERTY_R3_________________, _______, \
    KC_GRV, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
 ),
 
@@ -154,42 +153,53 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
    *            │     │ F9  │ F10 │ F11 │ F12 │  [  │   │  ]  │  1  │  2  │  3  │  -  │  +  │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │     │     │     │     │     │   │     │     │  0  │  .  │  ,  │ --- │
+   *            │     │     │     │     │     │     │   │     │     │  0  │  .  │  ,  │ SPC │
    *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
    */
-[_RAISE] = LAYOUT_ortho_4x12( \
+[_RAISE] = LETS_SPLIT( \
   _______,  KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 , KC_LCBR, KC_RCBR,   KC_7 ,   KC_8 ,   KC_9 , KC_PSLS, KC_PEQL, \
   _______,  KC_F5 ,  KC_F6 ,  KC_F7 ,  KC_F8 , KC_LPRN, KC_RPRN,   KC_4 ,   KC_5 ,   KC_6 , KC_PAST, KC_UNDS, \
   _______,  KC_F9 ,  KC_F10,  KC_F11,  KC_F12, KC_LBRC, KC_RBRC,   KC_1 ,   KC_2 ,   KC_3 , KC_PMNS, KC_PPLS, \
-  _______, _______, _______, _______, _______, _______, _______, _______,   KC_0 ,  KC_DOT, KC_COMM, ___x___  \
+  _______, _______, _______, _______, _______, _______, _______, _______,   KC_0 ,  KC_DOT, KC_COMM, KC_SPC  \
+),
+
+/* Navigation (Triggered by holding right pinky), could add mouse-movements to left hand
+   *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+   *            │     │     │     │     │     │     │   │     │     │  ↑  │     │     │     │
+   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+   *            │     │     │     │     │     │     │   │     │  ←  │  ↓  │  →  │ NAV │     │
+   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+   *            │     │     │     │     │     │     │   │     │     │     │     │     │     │
+   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+   *            │     │     │     │     │     │     │   │     │     │     │     │     │     │
+   *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
+   */
+[_NAV] = LETS_SPLIT( \
+  ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___,  KC_UP , ___x___, ___x___, ___x___, \
+  ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, KC_LEFT, KC_DOWN, KC_RGHT, _______, ___x___, \
+  ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, \
+  ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______, ___x___, ___x___, ___x___, ___x___  \
 ),
 
 /* Adjust (Lower + Raise)
    *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-   *            │     │RESET│     │     │     │  {  │   │  }  │     │     │     │     │     │
+   *            │     │     │RESET│     │     │  {  │   │  }  │     │     │     │     │     │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │     │     │     │     │  (  │   │  )  │QWRTY│COLMK│NORMN│DVORK│     │
+   *            │     │     │     │     │     │  (  │   │  )  │NORMN│QWRTY│     │     │     │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
    *            │     │     │     │     │     │  [  │   │  ]  │     │     │     │     │     │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
    *            │     │     │     │     │     │     │   │     │     │     │     │     │     │
    *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
    */
-[_ADJUST] =  LAYOUT_ortho_4x12( \
-  ___x___,  RESET , ___x___, ___x___, ___x___, KC_LCBR, KC_RCBR, ___x___, ___x___, ___x___, ___x___, ___x___, \
-  ___x___, ___x___, ___x___, ___x___, ___x___, KC_LPRN, KC_RPRN, QWERTY , COLEMAK, NORMAN , DVORAK , ___x___, \
+[_ADJUST] = LETS_SPLIT( \
+  ___x___, ___x___,  RESET , ___x___, ___x___, KC_LCBR, KC_RCBR, ___x___, ___x___, ___x___, ___x___, ___x___, \
+  ___x___, ___x___, ___x___, ___x___, ___x___, KC_LPRN, KC_RPRN,  NORMAN,  QWERTY, ___x___, ___x___, ___x___, \
   ___x___, ___x___, ___x___, ___x___, ___x___, KC_LBRC, KC_RBRC, ___x___, ___x___, ___x___, ___x___, ___x___, \
   ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______, ___x___, ___x___, ___x___, ___x___  \
 )
 
 };
-
-#ifdef AUDIO_ENABLE
-float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
-float tone_dvorak[][2]     = SONG(DVORAK_SOUND);
-float tone_colemak[][2]    = SONG(COLEMAK_SOUND);
-float tone_norman[][2]     = SONG(QWERTY_SOUND);
-#endif
 
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
@@ -198,39 +208,15 @@ void persistent_default_layer_set(uint16_t default_layer) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(tone_qwerty);
-        #endif
-        persistent_default_layer_set(1UL<<_QWERTY);
-      }
-      return false;
-      break;
-    case COLEMAK:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(tone_colemak);
-        #endif
-        persistent_default_layer_set(1UL<<_COLEMAK);
-      }
-      return false;
-      break;
     case NORMAN:
       if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(tone_norman);
-        #endif
         persistent_default_layer_set(1UL<<_NORMAN);
       }
       return false;
       break;
-    case DVORAK:
+    case QWERTY:
       if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(tone_dvorak);
-        #endif
-        persistent_default_layer_set(1UL<<_DVORAK);
+        persistent_default_layer_set(1UL<<_QWERTY);
       }
       return false;
       break;
