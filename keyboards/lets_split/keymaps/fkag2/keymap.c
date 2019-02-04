@@ -15,7 +15,6 @@ extern keymap_config_t keymap_config;
 #define _QWERTY 1
 #define _LOWER 4
 #define _RAISE 5
-#define _NAV 6
 #define _ADJUST 16
 
 enum custom_keycodes {
@@ -23,7 +22,6 @@ enum custom_keycodes {
   QWERTY,
   LOWER,
   RAISE,
-  NAV,
   ADJUST,
 };
 
@@ -33,9 +31,6 @@ enum custom_keycodes {
 #define SFT_ESC SFT_T(KC_ESC)  // Shift / ⇧ when held, Escape when tapped
 #define CTL_ESC CTL_T(KC_ESC)  // Control / ⌃ when held, Escape when tapped
 #define CTL_TAB CTL_T(KC_TAB)  // Control / ⇧ when held, Tab when tapped
-
-// Nav layer trigger
-#define NAV_T(kc) LT(_NAV, kc)  // Nav layer when held, kc when tapped
 
 // Mac desktop movement keys
 #define DSK_L LCTL(KC_LEFT)
@@ -48,7 +43,7 @@ enum custom_keycodes {
 #define SCSLC SCMD(KC_4)       // Takes a select-area screenshot
 #define W_L   SCMD(KC_LBRC)    // Shifts view one tab to the left
 #define W_R   SCMD(KC_RBRC)    // Shifts view one tab to the right
-#define SCLCK S(LCTL(KC_PWR)) // Locks the screen on a Mac
+#define SCLCK S(LCTL(KC_PWR))  // Locks the screen on a Mac
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
@@ -62,8 +57,8 @@ enum custom_keycodes {
 #define _________________NORMAN_L3_________________ KC_Z,    KC_X,    KC_C,    KC_V,    KC_B
 
 #define _________________NORMAN_R1_________________ KC_J,    KC_U,    KC_R,    KC_L,    KC_SCLN
-#define _________________NORMAN_R2_________________ KC_Y,    KC_N,    KC_I,    KC_O,    NAV_T(KC_H)
-#define _________________NORMAN_R3_________________ KC_P,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH
+#define _________________NORMAN_R2_________________ KC_Y,    KC_N,    KC_I,    KC_O,    KC_H
+#define _________________NORMAN_R3________          KC_P,    KC_M,    KC_COMM, KC_DOT
 
 // QWERTY layer
 #define _________________QWERTY_L1_________________ KC_Q,    KC_W,    KC_E,    KC_R,    KC_T
@@ -71,8 +66,8 @@ enum custom_keycodes {
 #define _________________QWERTY_L3_________________ KC_Z,    KC_X,    KC_C,    KC_V,    KC_B
 
 #define _________________QWERTY_R1_________________ KC_Y,    KC_U,    KC_I,    KC_O,    KC_P
-#define _________________QWERTY_R2_________________ KC_H,    KC_J,    KC_K,    KC_L,    NAV_T(KC_SCLN)
-#define _________________QWERTY_R3_________________ KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH
+#define _________________QWERTY_R2_________________ KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN
+#define _________________QWERTY_R3________          KC_N,    KC_M,    KC_COMM, KC_DOT
 
 #define LETS_SPLIT(...) LAYOUT_ortho_4x12(__VA_ARGS__)  // macro wrapper to manage with above definitions
 
@@ -82,11 +77,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
  *            │ DEL │     │     │     │     │     │   │     │     │     │     │     │     │
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
- *            │⌃/TAB│     │     │     │     │     │   │     │     │     │     │ NAV │     │ -- Only when held
+ *            │⌃/TAB│     │     │     │     │     │   │     │     │     │     │     │     │
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
- *            │⇧/ESC│     │     │     │     │     │   │     │     │     │     │     │⇧/ENT│
+ *            │⇧/ESC│     │     │     │     │     │   │     │     │     │     │  ↑  │⇧/ENT│
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
- *            │     │HYPER│  ⌥  │  ⌘  │LOWER│ SPC │   │BSPC │RAISE│  ⌘  │  ⌥  │HYPER│     │
+ *            │     │HYPER│  ⌥  │  ⌘  │LOWER│ SPC │   │BSPC │RAISE│     │  ←  │  ↓  │  →  │
  *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
  *   NOTE: I had to switch LCMD and LALT layout on base layer to get CMD / ALT to work nicely
  */
@@ -97,16 +92,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
  *            │     │  A  │  S  │  E  │  T  │  G  │   │  Y  │  N  │  I  │  O  │  H  │  '  │
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
- *            │     │  Z  │  X  │  C  │  V  │  B  │   │  P  │  M  │  ,  │  .  │  /  │     │
+ *            │     │  Z  │  X  │  C  │  V  │  B  │   │  P  │  M  │  ,  │  .  │     │     │
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
- *            │  `  │     │     │     │     │     │   │     │     │     │     │     │     │
+ *            │  `  │     │     │     │     │     │   │     │     │  /  │     │     │     │
  *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
  */
 [_NORMAN] = LETS_SPLIT( \
    KC_DEL, _________________NORMAN_L1_________________, _________________NORMAN_R1_________________, KC_BSLS, \
   CTL_TAB, _________________NORMAN_L2_________________, _________________NORMAN_R2_________________, KC_QUOT, \
-  SFT_ESC, _________________NORMAN_L3_________________, _________________NORMAN_R3_________________, SFT_ENT, \
-   KC_GRV, KC_HYPR, KC_LALT, KC_LCMD,   LOWER,  KC_SPC, KC_BSPC,   RAISE, KC_RCMD, KC_RALT, KC_HYPR, ___x___  \
+  SFT_ESC, _________________NORMAN_L3_________________, _________________NORMAN_R3________, KC_UP,   SFT_ENT, \
+   KC_GRV, KC_HYPR, KC_LALT, KC_LCMD,   LOWER,  KC_SPC, KC_BSPC,   RAISE, KC_SLSH, KC_LEFT, KC_DOWN, KC_RIGHT  \
 ),
 
 /* Base layer (Qwerty, back-up layer)
@@ -115,16 +110,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
  *            │     │  A  │  S  │  D  │  F  │  G  │   │  H  │  J  │  K  │  L  │  ;  │  '  │
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
- *            │     │  Z  │  X  │  C  │  V  │  B  │   │  N  │  M  │  ,  │  .  │  /  │     │
+ *            │     │  Z  │  X  │  C  │  V  │  B  │   │  N  │  M  │  ,  │  .  │     │     │
  *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
- *            │  `  │     │     │     │     │     │   │     │     │     │     │     │     │
+ *            │  `  │     │     │     │     │     │   │     │     │  /  │     │     │     │
  *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
  */
 [_QWERTY] = LETS_SPLIT( \
   _______, _________________QWERTY_L1_________________, _________________QWERTY_R1_________________, KC_BSLS, \
   _______, _________________QWERTY_L2_________________, _________________QWERTY_R2_________________, KC_QUOT, \
-  _______, _________________QWERTY_L3_________________, _________________QWERTY_R3_________________, _______, \
-   KC_GRV, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
+  _______, _________________QWERTY_L3_________________, _________________QWERTY_R3________, _______, _______, \
+   KC_GRV, _______, _______, _______, _______, _______, _______, _______, KC_SLSH, _______, _______, _______  \
 ),
 
 /* Lower (Numbers and Desktop Navigation)
@@ -133,16 +128,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
    *            │     │  ←  │  ↑  │  ↓  │  →  │  (  │   │  )  │  $  │  %  │  ^  │  (  │  )  │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │Next │Vol- │Vol+ │Play │  [  │   │  ]  │  !  │  @  │  #  │  |  │     │
+   *            │     │Next │Vol- │Vol+ │Play │  [  │   │  ]  │  !  │  @  │  #  │     │     │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │SCLCK│     │     │     │     │     │   │     │     │     │     │     │     │
+   *            │SCLCK│     │     │     │     │     │   │     │     │  /  │     │     │     │
    *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
    */
 [_LOWER] = LAYOUT_ortho_4x12( \
   _______,  SCSHT ,  SCSLC ,   W_L  ,   W_R  , KC_LCBR, KC_RCBR, S(KC_7), S(KC_8), KC_BSLS, KC_LBRC, KC_RBRC, \
   _______,  DSK_L ,  DSK_U ,  DSK_D ,  DSK_R , KC_LPRN, KC_RPRN, S(KC_4), S(KC_5), S(KC_6), KC_LPRN, KC_RPRN, \
-  _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY, KC_LBRC, KC_RBRC, S(KC_1), S(KC_2), S(KC_3), KC_PIPE, _______, \
-   SCLCK , _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
+  _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY, KC_LBRC, KC_RBRC, S(KC_1), S(KC_2), S(KC_3), _______, _______, \
+   SCLCK , _______, _______, _______, _______, _______, _______, _______, KC_SLSH, _______, _______, _______  \
 ),
 
 /* Raise (Symbols and Function keys)
@@ -163,24 +158,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______, _______, _______, _______,   KC_0 ,  KC_DOT, KC_COMM, KC_SPC  \
 ),
 
-/* Navigation (Triggered by holding right pinky), could add mouse-movements to left hand
-   *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-   *            │     │     │     │     │     │     │   │     │     │  ↑  │     │     │     │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │     │     │     │     │     │   │     │  ←  │  ↓  │  →  │ NAV │     │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │     │     │     │     │     │   │     │     │     │     │     │     │
-   *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-   *            │     │     │     │     │     │     │   │     │     │     │     │     │     │
-   *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
-   */
-[_NAV] = LETS_SPLIT( \
-  ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___,  KC_UP , ___x___, ___x___, ___x___, \
-  ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, KC_LEFT, KC_DOWN, KC_RGHT, _______, ___x___, \
-  ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, ___x___, \
-  ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______, ___x___, ___x___, ___x___, ___x___  \
-),
-
 /* Adjust (Lower + Raise)
    *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
    *            │     │     │RESET│     │     │  {  │   │  }  │     │     │     │     │     │
@@ -195,8 +172,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_ADJUST] = LETS_SPLIT( \
   ___x___, ___x___,  RESET , ___x___, ___x___, KC_LCBR, KC_RCBR, ___x___, ___x___, ___x___, ___x___, ___x___, \
   ___x___, ___x___, ___x___, ___x___, ___x___, KC_LPRN, KC_RPRN,  NORMAN,  QWERTY, ___x___, ___x___, ___x___, \
-  ___x___, ___x___, ___x___, ___x___, ___x___, KC_LBRC, KC_RBRC, ___x___, ___x___, ___x___, ___x___, ___x___, \
-  ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______, ___x___, ___x___, ___x___, ___x___  \
+  ___x___, ___x___, ___x___, ___x___, ___x___, KC_LBRC, KC_RBRC, ___x___, ___x___, ___x___, _______, ___x___, \
+  ___x___, ___x___, ___x___, ___x___, _______, _______, _______, _______, ___x___, _______, _______, _______  \
 )
 
 };
