@@ -29,13 +29,13 @@ enum custom_keycodes {
 enum tap_dances {
   TD_L = 0,  // Left parens, brace
   TD_R,  // Right parens, brace
-  TD_E  // 0 or e
+  TD_E  // dot or e
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
   [TD_L]  = ACTION_TAP_DANCE_DOUBLE(KC_LPRN, KC_LCBR),
   [TD_R]  = ACTION_TAP_DANCE_DOUBLE(KC_RPRN, KC_RCBR),
-  [TD_E]  = ACTION_TAP_DANCE_DOUBLE(KC_0, KC_E)
+  [TD_E]  = ACTION_TAP_DANCE_DOUBLE(KC_DOT, KC_E)
 };
 
 // Mod taps
@@ -50,7 +50,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define HYPER_R ALL_T(KC_RBRC)  // Hyper when held, } when tapped
 #define TAP_L TD(TD_L)  // (, {
 #define TAP_R TD(TD_R)  // ), }
-#define TAP_0E TD(TD_E) // 0, e
+#define TAP_DE TD(TD_E) // ., e
 
 // Mac desktop movement keys
 #define DSK_L LCTL(KC_LEFT)
@@ -161,7 +161,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Raise (Symbols and navigation keys)
    *            ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-   *            │     │     │     │  ↑  │     │  {  │   │  }  │  7  │  8  │  9  │  /  │  =  │
+   *            │     │     │ HOME│  ↑  │ END │  {  │   │  }  │  7  │  8  │  9  │  /  │  =  │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
    *            │     │     │  ←  │  ↓  │  →  │  (  │   │  )  │  4  │  5  │  6  │  *  │  _  │
    *            ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
@@ -171,10 +171,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *            └─────┴─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┴─────┘
    */
 [_RAISE] = LETS_SPLIT( \
-  _______,  KC_F1 ,  KC_F2 ,  KC_UP , ___x___, KC_LCBR, KC_RCBR,   KC_7 ,   KC_8 ,   KC_9 , KC_PSLS, KC_PEQL, \
-  _______,  KC_F5 , KC_LEFT, KC_DOWN, KC_RGHT, KC_LPRN, KC_RPRN,   KC_4 ,   KC_5 ,   KC_6 , KC_PAST, KC_UNDS, \
-  _______,  KC_F9 ,  KC_F10,  KC_F11,  KC_F12, KC_LBRC, KC_RBRC,   KC_1 ,   KC_2 ,   KC_3 , KC_PMNS, KC_PPLS, \
-  _______, _______, _______, _______, _______, _______, _______, _______,  TAP_0E,  KC_DOT, KC_COMM, KC_SPC  \
+  _______, ___x___, KC_HOME,  KC_UP ,  KC_END, KC_LCBR, KC_RCBR,   KC_7 ,   KC_8 ,   KC_9 , KC_PSLS, KC_PEQL, \
+  _______, ___x___, KC_LEFT, KC_DOWN, KC_RGHT, KC_LPRN, KC_RPRN,   KC_4 ,   KC_5 ,   KC_6 , KC_PAST, KC_UNDS, \
+  _______, ___x___, ___x___, ___x___, ___x___, KC_LBRC, KC_RBRC,   KC_1 ,   KC_2 ,   KC_3 , KC_PMNS, KC_PPLS, \
+  _______, _______, _______, _______, _______, _______, _______, _______,   KC_0 ,  TAP_DE, KC_COMM, KC_SPC  \
 ),
 
 /* Center (Lower + Raise)  (Function keys and misc)
