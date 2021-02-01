@@ -40,6 +40,12 @@ enum tap_dances {
   TD_E  // dot or e
 };
 
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_L]  = ACTION_TAP_DANCE_DOUBLE(KC_LPRN, KC_LCBR),
+  [TD_R]  = ACTION_TAP_DANCE_DOUBLE(KC_RPRN, KC_RCBR),
+  [TD_E]  = ACTION_TAP_DANCE_DOUBLE(KC_DOT, KC_E)
+};
+
 // Mod taps
 #define SFT_ENT SFT_T(KC_ENT)  // Shift when held, Enter when tapped
 #define SFT_TAB SFT_T(KC_TAB)  // Shift when held, Tab when tapped
